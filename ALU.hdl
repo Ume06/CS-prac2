@@ -43,23 +43,23 @@ CHIP ALU {
 
     PARTS:
     // Put you code here:
-    Mux16(a=x, b=false, sel=zx, out=c1);
-    Not16(in=c1, out=notx);
-    Mux16(a=c1, b=notx, sel=nx, out=c2);
+    Mux16(a=x, b=false, sel=zx, out=x1);
+    Not16(in=x1, out=notx);
+    Mux16(a=x1, b=notx, sel=nx, out=x2);
 
-    Mux16(a=y, b=false, sel=zy, out=c3);
-    Not16(in=c3, out=noty);
-    Mux16(a=c3, b=noty, sel=ny, out=c4);
+    Mux16(a=y, b=false, sel=zy, out=y1);
+    Not16(in=y1, out=noty);
+    Mux16(a=y1, b=noty, sel=ny, out=y2);
 
-    And16(a=x2, b=y2, out=xy);
-    Add16(a=x2, b=y2, out=xay);
+    Add16(a=x2, b=y2, out=addxy);
+    And16(a=x2, b=y2, out=andxy);
 
-    Mux16(a=xy, b=xay, sel=f, out=c5);
-    Not16(in=c5, out=nc5);
-    Mux16(a=c5, b=nc5, sel=no, out=out, out[0..7]=outl, out[8..15]=outh, out[15]=ng);
+    Mux16(a=andxy, b=addxy, sel=f, out=posf);
+    Not16(in=posf, out=negf);
+    Mux16(a=posf, b=negf, sel=no, out=out, out[0..7]=outlow, out[8..15]=outhi, out[15]=ng);
 
-    Or8Way(in=outl, out=olow);
-    Or8Way(in=outh,  out=ohi);
-    Or(a=olow, b=ohi, out=nzr);
+    Or8Way(in=outlow, out=lowor);
+    Or8Way(in=outhi,  out=hior);
+    Or(a=lowor, b=hior, out=nzr);
     Not(in=nzr, out=zr);
 }
